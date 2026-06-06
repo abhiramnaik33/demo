@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ZenDash - A beautiful, minimalist productivity dashboard featuring a live clock, dynamic quotes, a custom Pomodoro timer, and a tasks manager.">
+    <title>ZenDash // Your Personal Space</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Glowing Orbs -->
+    <div class="orb-container">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Main Container -->
+    <main class="dashboard-container">
+        <!-- Sidebar / Control Panel -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fa-solid fa-compass-drafting brand-icon"></i>
+                <span class="brand-name">ZenDash</span>
+            </div>
+            
+            <nav class="nav-menu">
+                <button class="nav-item active" data-tab="dashboard" id="btn-tab-dash">
+                    <i class="fa-solid fa-house-chimney"></i>
+                    <span>Dashboard</span>
+                </button>
+                <button class="nav-item" data-tab="focus" id="btn-tab-focus">
+                    <i class="fa-solid fa-circle-dot"></i>
+                    <span>Focus Timer</span>
+                </button>
+                <button class="nav-item" data-tab="tasks" id="btn-tab-tasks">
+                    <i class="fa-solid fa-list-check"></i>
+                    <span>Tasks</span>
+                </button>
+            </nav>
+
+            <div class="theme-selector">
+                <span class="selector-label">Appearance</span>
+                <div class="theme-buttons">
+                    <button class="theme-btn active" data-theme="aurora" title="Aurora Glow" id="theme-aurora">
+                        <span class="dot aurora-dot"></span>
+                    </button>
+                    <button class="theme-btn" data-theme="nebula" title="Nebula Purple" id="theme-nebula">
+                        <span class="dot nebula-dot"></span>
+                    </button>
+                    <button class="theme-btn" data-theme="sunset" title="Sunset Orange" id="theme-sunset">
+                        <span class="dot sunset-dot"></span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <section class="content-area">
+            <!-- Header Section -->
+            <header class="dashboard-header">
+                <div class="greeting-box">
+                    <h1 id="greeting-text" class="greeting">Good evening, Guest</h1>
+                    <p class="subtitle">Welcome back to your mindful workspace.</p>
+                </div>
+                <div class="header-widgets">
+                    <!-- Live Clock -->
+                    <div class="clock-widget" id="clock-widget">
+                        <span id="clock-time">00:00:00</span>
+                        <span id="clock-date">Saturday, June 6</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Grid Layout for Dashboard Tab -->
+            <div class="tab-content active" id="tab-dashboard">
+                <div class="grid-layout">
+                    <!-- Left: Focus Quick Widget -->
+                    <div class="card glass-card focus-quick-card">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-hourglass-half header-icon"></i>Focus Session</h2>
+                            <span class="badge" id="quick-timer-status">Ready</span>
+                        </div>
+                        <div class="quick-timer-body">
+                            <div class="timer-display-mini" id="mini-timer">25:00</div>
+                            <div class="timer-controls-mini">
+                                <button class="btn btn-primary btn-icon" id="quick-timer-toggle" title="Start/Pause">
+                                    <i class="fa-solid fa-play"></i>
+                                </button>
+                                <button class="btn btn-secondary btn-icon" id="quick-timer-reset" title="Reset">
+                                    <i class="fa-solid fa-rotate-left"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Middle: Core Quote and Mindfulness Widget -->
+                    <div class="card glass-card quote-card">
+                        <div class="quote-content">
+                            <i class="fa-solid fa-quote-left quote-icon"></i>
+                            <p id="quote-text">Loading daily inspiration...</p>
+                            <span id="quote-author" class="quote-author">— Author</span>
+                        </div>
+                        <button class="btn btn-text-icon" id="next-quote-btn">
+                            <i class="fa-solid fa-arrows-rotate"></i> New Quote
+                        </button>
+                    </div>
+
+                    <!-- Right: Quick Tasks Widget -->
+                    <div class="card glass-card quick-tasks-card">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-list-check header-icon"></i>Today's Focus</h2>
+                            <span class="badge" id="tasks-count">0 tasks</span>
+                        </div>
+                        <div class="quick-tasks-body">
+                            <form id="quick-task-form" class="task-form">
+                                <input type="text" id="quick-task-input" placeholder="What is your next focus?" required autocomplete="off">
+                                <button type="submit" class="btn btn-primary" id="btn-add-task"><i class="fa-solid fa-plus"></i></button>
+                            </form>
+                            <ul class="task-list" id="quick-task-list">
+                                <!-- Tasks dynamically injected -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Focus Tab (Full Timer) -->
+            <div class="tab-content" id="tab-focus">
+                <div class="focus-tab-container card glass-card">
+                    <div class="timer-outer">
+                        <svg class="timer-ring" width="280" height="280">
+                            <circle class="timer-ring__circle-bg" stroke="rgba(255, 255, 255, 0.05)" stroke-width="8" fill="transparent" r="130" cx="140" cy="140"/>
+                            <circle class="timer-ring__circle" id="timer-progress" stroke="var(--primary-glow)" stroke-width="8" fill="transparent" r="130" cx="140" cy="140"/>
+                        </svg>
+                        <div class="timer-inner">
+                            <div class="timer-time" id="full-timer-display">25:00</div>
+                            <div class="timer-label" id="timer-mode-label">Focus Time</div>
+                        </div>
+                    </div>
+
+                    <div class="focus-controls">
+                        <button class="btn btn-secondary" id="timer-btn-mode-focus">Focus</button>
+                        <button class="btn btn-secondary" id="timer-btn-mode-break">Short Break</button>
+                    </div>
+
+                    <div class="focus-action-buttons">
+                        <button class="btn btn-primary btn-large" id="full-timer-toggle">
+                            <i class="fa-solid fa-play"></i> Start Session
+                        </button>
+                        <button class="btn btn-secondary btn-large" id="full-timer-reset">
+                            <i class="fa-solid fa-rotate-left"></i> Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tasks Tab (Full Task Manager) -->
+            <div class="tab-content" id="tab-tasks">
+                <div class="tasks-tab-container grid-layout-tasks">
+                    <div class="card glass-card tasks-creator">
+                        <h2>Create New Task</h2>
+                        <form id="full-task-form" class="task-creator-form">
+                            <div class="form-group">
+                                <label for="task-title">Task Title</label>
+                                <input type="text" id="task-title" placeholder="e.g., Finish wireframing homepage" required autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="task-priority">Priority</label>
+                                <select id="task-priority">
+                                    <option value="low">Low Priority</option>
+                                    <option value="medium" selected>Medium Priority</option>
+                                    <option value="high">High Priority</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block" id="btn-submit-task">
+                                <i class="fa-solid fa-plus"></i> Add Task to List
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="card glass-card tasks-list-container">
+                        <div class="card-header">
+                            <h2>All Tasks</h2>
+                            <button class="btn btn-text" id="clear-completed-btn">Clear Completed</button>
+                        </div>
+                        <div class="tasks-filter-bar">
+                            <button class="filter-btn active" data-filter="all" id="filter-all">All</button>
+                            <button class="filter-btn" data-filter="active" id="filter-active">Active</button>
+                            <button class="filter-btn" data-filter="completed" id="filter-completed">Completed</button>
+                        </div>
+                        <ul class="task-list-full" id="full-task-list">
+                            <!-- Injected by JS -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer-note">
+        <p>&copy; 2026 ZenDash. Crafted with mindfulness and modern aesthetics.</p>
+    </footer>
+
+    <!-- Script file -->
+    <script src="script.js"></script>
+</body>
+</html>
